@@ -1,0 +1,18 @@
+.db-dynamic-dot {
+  display: inline-block;
+  height: 1em;
+  line-height: 1;
+  text-align: left;
+  vertical-align: -.25em;
+  overflow: hidden;
+  &::before {
+    display: block;
+    content: '...\A..\A.';
+    white-space: pre-wrap; 
+    animation: dynamicdot 1s infinite step-start both; 
+  }
+} 
+@keyframes dynamicdot { 
+  33% { transform: translateY(-2em); } 
+  66% { transform: translateY(-1em); } 
+}

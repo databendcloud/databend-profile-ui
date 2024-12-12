@@ -7,10 +7,21 @@
     "jsx": "react",
     "baseUrl": "./",
     "paths": {
-      "@@/*": [".dumi/tmp/*"],
-      "databend-profile-ui": ["src"],
-      "databend-profile-ui/*": ["src/*", "*"]
+      "@@/*": [
+        ".dumi/tmp/*"
+      ],
+      "databend-profile-ui": [
+        "src"
+      ],
+      "databend-profile-ui/*": [
+        "src/*",
+        "*"
+      ]
     }
   },
-  "include": [".dumirc.ts", "src/**/*"]
+  "include": [
+    ".dumirc.ts",
+    "src/**/*",
+    "./dumi-env.d.ts"
+  ]
 }
