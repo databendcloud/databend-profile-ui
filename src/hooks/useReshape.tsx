@@ -8,7 +8,7 @@ export function useReshape() {
       bindChartResize();
     }
   });
-  function reshape(myChart: any, dom = '.whole-wrap') {
+  function reshape(myChart: any, dom = 'body') {
     bindChartResize = bind(document?.querySelector(dom) as HTMLElement, () => {
       myChart.resize({
         animation: {
@@ -19,7 +19,7 @@ export function useReshape() {
     });
   }
 
-  function reshapeDOM(callback: () => void, dom = '.site-layout-right') {
+  function reshapeDOM(callback: () => void, dom = 'body') {
     bindChartResize = bind(document?.querySelector(dom) as HTMLElement, () => {
       callback();
     });

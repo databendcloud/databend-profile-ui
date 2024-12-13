@@ -20,8 +20,8 @@ const Copy: FC<IProps> = ({
   className,
   copyText,
 }): ReactElement => {
-  const TEXT = '复制';
-  const TEXTED = '已复制';
+  const TEXT = 'Copy';
+  const TEXTED = 'Copied';
   const [text, setText] = useState(TEXT);
 
   const copyCode = () => {

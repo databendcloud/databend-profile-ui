@@ -49,3 +49,11 @@ export const filterMinute = (second: number) => {
 export function getPercent(up: number, down: number): string {
   return down <= 0 ? '0%' : ((up / down) * 100).toFixed(1) + '%';
 }
+export function isValidJSON(str: string): boolean {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}

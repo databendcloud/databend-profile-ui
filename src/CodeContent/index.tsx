@@ -67,6 +67,7 @@ const CodeContent: FC<IProps> = ({
         style={{ fontWeight: 500, whiteSpace: 'pre-wrap' }}
         ref={containerRef}
       >
+        {/* @ts-ignore */}
         <Highlight style={okaidia}>{inner}</Highlight>
       </div>
     </div>

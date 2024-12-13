@@ -1,10 +1,39 @@
-:root {
-  --color-bg-1: #fff;
-  --color-primary: rgb(1, 117, 246);
-  --color-text-0: rgb(1, 14, 41);
-  --color-text-1: rgba(12, 22, 43, 0.8);
-  --color-border: rgba(1, 14, 41, 0.08);
-  --color-text-2: rgba(12, 22, 43, 0.6);
-  --color-fill-0: rgba(220, 227, 239, 0.25);
-  --color-fill-1: rgba(220, 227, 239, 0.4);
+@import '~antd/dist/reset.css';
+@import './fonts.less';
+@import './src/assets/css/icons.less';
+@import './src/assets/css/profile.less';
+@font-face {
+  font-family: 'databend-icon-v2'; /* Project id 4657980 */
+  src: url('//at.alicdn.com/t/c/font_4657980_r3j9xmu6p58.woff2?t=1727336272293')
+      format('woff2'),
+    url('//at.alicdn.com/t/c/font_4657980_r3j9xmu6p58.woff?t=1727336272293')
+      format('woff'),
+    url('//at.alicdn.com/t/c/font_4657980_r3j9xmu6p58.ttf?t=1727336272293')
+      format('truetype');
+}
+.databend-icon-v2 {
+  font-family: 'databend-icon-v2' !important;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  // color: @color-text-1;
+}
+html,
+body,
+.dumi-default-doc-layout,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  font-family: 'Poppins', apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'PingFang SC', 'Hiragino Sans GB' !important;
+}
+
+[class^='ant-'],
+[class*='ant-'] {
+  font-family: 'Poppins', apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'PingFang SC', 'Hiragino Sans GB' !important;
 }
