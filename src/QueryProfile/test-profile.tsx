@@ -10,9 +10,11 @@ const { TextArea } = Input;
 
 interface TestProfileProps {
   isDemo?: boolean;
+  isNeedMetrics?: boolean;
 }
 const TestProfile: FC<TestProfileProps> = ({
   isDemo = false,
+  isNeedMetrics = false,
 }): ReactElement => {
   const [value, setValue] = useState<any | undefined>('');
   const [queryId, setQueryId] = useState('');
@@ -103,6 +105,7 @@ const TestProfile: FC<TestProfileProps> = ({
           offsetWidth={
             isDemo ? (selfHidden ? 900 : 1200) : selfHidden ? 100 : 695
           }
+          isNeedMetrics={isNeedMetrics}
           offsetHeight={60}
           countShow={count}
           outValue={value && isValidJSON(value) ? JSON.parse(value) : ''}

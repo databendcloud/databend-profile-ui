@@ -14,5 +14,5 @@ export default () => (
 ```jsx
 import { TestProfile } from 'databend-profile-ui';
 
-export default () => <TestProfile isDemo />;
+export default () => <TestProfile isDemo isNeedMetrics={true} />;
 ```
