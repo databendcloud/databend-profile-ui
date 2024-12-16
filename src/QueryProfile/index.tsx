@@ -28,12 +28,13 @@ import MetricsModal from './metrics-modal';
 type TUnit = 'NanoSeconds' | 'MillisSeconds' | 'Bytes' | 'Rows' | 'Count';
 const CPU_TIEM_KEY = 'CpuTime';
 const WAIT_TIEM_KEY = 'WaitTime';
+type JSON = any;
 interface IProps {
+  outValue?: JSON;
   profileRef?: any;
   queryDuration: number;
   orgSlug?: string;
   queryId?: string;
-  outValue?: string;
   countShow?: number;
   offsetWidth?: number;
   offsetHeight?: number;

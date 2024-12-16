@@ -20,12 +20,11 @@ export default () => <TestProfile isDemo />;
 ### QueryProfile props
 
 ```javascript
-
+outValue?: JSON;
 pileRef?: any;
 queryDuration: number;
 orgSlug?: string;
 queryId?: string;
-outValue?: string;
 countShow?: number;
 offsetWidth?: number;
 offsetHeight?: number;
