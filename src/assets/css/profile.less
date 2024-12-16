@@ -13,7 +13,9 @@ html[data-prefers-color='light'] {
   --node-heaer-color: #010e29;
 }
 
-:root.theme-dark.dark.dark-theme.dark-mode,
+.theme-dark:root,
+:root.theme-dark,
+html.theme-dark,
 html[data-prefers-color='dark'] {
   --color-bg-1: rgb(18, 24, 38);
   --color-primary: rgb(50, 147, 248);

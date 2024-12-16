@@ -355,7 +355,7 @@ const CacheFlowAnalysisGraph: FC<any> = ({
           group.addShape('path', {
             attrs: {
               path: pathMoon,
-              fill: isExistedError ? '#f73920' : '#fff',
+              fill: isExistedError ? '#f73920' : isLight ? '#fff' : '#101',
             },
             name: `circle-path-bg-${Math.random()}`,
           });
