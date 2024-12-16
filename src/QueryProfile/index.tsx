@@ -218,7 +218,7 @@ const QueryProfile: FC<IProps> = ({
     };
     overviewInfoCurrent.current = info;
     setOverviewInfo(info);
-    getOverviewInfo(info);
+    getOverviewInfo?.(info);
   }
   function resetFitView() {
     const graph = graphRef?.current;
@@ -311,7 +311,7 @@ const QueryProfile: FC<IProps> = ({
       errors,
     };
     setOverviewInfo(info);
-    getOverviewInfo(info);
+    getOverviewInfo?.(info);
   }
   function getAllNodes(graph: any) {
     return graph.getNodes();
@@ -504,10 +504,10 @@ const QueryProfile: FC<IProps> = ({
                   'profile-common-styles-pm',
                 )}
               >
-                <div className="profile-common-styles-few g-color-text-danger">
+                <Space className="profile-common-styles-few g-color-text-danger">
                   {'Errors'}
                   {ErrorTicketDom && ErrorTicketDom}
-                </div>
+                </Space>
                 {overviewInfo?.errors?.map((error, index) => {
                   return (
                     <div key={index} className="g-mt-10">
@@ -670,7 +670,7 @@ const QueryProfile: FC<IProps> = ({
                     setActiveName('');
                     setIsTotalOverView(true);
                     setOverviewInfo(overviewInfoCurrent?.current);
-                    getOverviewInfo(overviewInfoCurrent?.current);
+                    getOverviewInfo?.(overviewInfoCurrent?.current);
                     clearNodeActive(graph);
                   });
                   graph.on('canvas:dragstart', () => {
