@@ -21,7 +21,7 @@ export default () => <TestProfile isDemo />;
 
 ```javascript
 outValue?: JSON;
-pileRef?: any;
+profileRef?: any;
 queryDuration: number;
 orgSlug?: string;
 queryId?: string;
