@@ -14,5 +14,24 @@ export default () => (
 ```jsx
 import { TestProfile } from 'databend-profile-ui';
 
-export default () => <TestProfile isDemo isNeedMetrics={false} />;
+export default () => <TestProfile isDemo />;
+```
+
+### QueryProfile props
+
+```javascript
+
+pileRef?: any;
+queryDuration: number;
+orgSlug?: string;
+queryId?: string;
+outValue?: string;
+countShow?: number;
+offsetWidth?: number;
+offsetHeight?: number;
+showTextArea?: boolean;
+initLoading?: boolean;
+isDemo?: boolean;
+isLight?: boolean;
+
 ```

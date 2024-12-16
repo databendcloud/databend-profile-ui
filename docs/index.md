@@ -1,22 +1,29 @@
 ---
 hero:
-  title: library
-  description: A react library developed with dumi
+  title: databend-profile-ui
+  description: profiles for databend
   actions:
-    - text: Hello
-      link: /
-    - text: World
-      link: /
-features:
-  - title: Hello
-    emoji: 💎
-    description: Put hello description here
-  - title: World
-    emoji: 🌈
-    description: Put world description here
-  - title: '!'
-    emoji: 🚀
-    description: Put ! description here
+    - text: Start
+      link: /components/query-profile
 ---
 
-databend-profile-ui
+## Install
+
+```bash
+yarn add databend-profile-ui
+```
+
+## Usage
+
+### styles
+
+```typescript
+//App.tsx:
+import 'databend-profile-ui/dist/assets/css/profile.less';
+```
+
+### import
+
+```typescript
+import { QueryProfile } from 'databend-profile-ui';
+```
