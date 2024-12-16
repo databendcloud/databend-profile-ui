@@ -28,10 +28,10 @@ jobs:
       - name: Build Docs
         run: npm run docs:build
 
-      - name: Publish
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.DATABEND_CLOUD_NPM_TOKEN_PROFILE_UI }}
+      # - name: Publish
+      #   run: npm publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.DATABEND_CLOUD_NPM_TOKEN_PROFILE_UI }}
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
