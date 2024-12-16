@@ -2,6 +2,8 @@ import { defineConfig } from 'dumi';
 
 export default defineConfig({
   outputPath: 'docs-dist',
+  base: '/databend-ui/',
+  publicPath: '/databend-ui/',
   themeConfig: {
     prefersColor: {
       switch: false
@@ -15,8 +17,8 @@ export default defineConfig({
       weibo: 'https://github.com/databendcloud/databend-profile-ui'
     },
   },
-  logo: '/logo.svg',
+  logo: '/databend-ui/logo.svg',
   favicons: [
-    '/favicon.svg'
+    '/databend-ui/favicon.svg'
   ]
 });
