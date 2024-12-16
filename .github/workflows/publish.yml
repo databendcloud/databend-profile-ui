@@ -28,13 +28,15 @@ jobs:
       - name: Build Docs
         run: npm run docs:build
 
-      # - name: Publish
-      #   run: npm publish
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.DATABEND_CLOUD_NPM_TOKEN_PROFILE_UI }}
+      - name: Publish to npm registry
+        run: |
+          echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > ~/.npmrc
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN_PROFILE }}
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.DATABEND_CLOUD_NPM_TOKEN_PROFILE_UI }}
-          publish_dir: ./docs-dist # Change this to the directory you want to deploy
+      # - name: Deploy to GitHub Pages
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.DATABEND_CLOUD_NPM_TOKEN_PROFILE_UI }}
+      #     publish_dir: ./docs-dist # Change this to the directory you want to deploy
