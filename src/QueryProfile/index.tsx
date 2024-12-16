@@ -43,6 +43,7 @@ interface IProps {
   isNeedMetrics?: boolean;
   isDemo?: boolean;
   isLight?: boolean;
+  ErrorTicketDom?: ReactElement;
 }
 interface IStatisticsDesc {
   _type: string;
@@ -116,6 +117,7 @@ const QueryProfile: FC<IProps> = ({
   isNeedMetrics = false,
   isDemo = false,
   isLight = true,
+  ErrorTicketDom = <></>,
 }): ReactElement => {
   const [graphSize, setGraphSize] = useSafeState(0);
   const profileWrapRefCanvas = useRef(null);
@@ -489,6 +491,7 @@ const QueryProfile: FC<IProps> = ({
               >
                 <div className="profile-common-styles-few g-color-text-danger">
                   {'Errors'}
+                  {ErrorTicketDom && ErrorTicketDom}
                 </div>
                 {overviewInfo?.errors?.map((error, index) => {
                   return (
