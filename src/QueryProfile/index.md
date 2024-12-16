@@ -30,7 +30,12 @@ offsetWidth?: number;
 offsetHeight?: number;
 showTextArea?: boolean;
 initLoading?: boolean;
+isNeedMetrics?: boolean;
 isDemo?: boolean;
 isLight?: boolean;
+ErrorTicketDom?: ReactElement;
+getActiveName?: (name: string) => void;
+getOverviewInfo?: (modal: any) => void;
+responseDom?: string;
 
 ```

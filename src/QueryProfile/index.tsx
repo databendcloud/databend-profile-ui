@@ -44,6 +44,9 @@ interface IProps {
   isDemo?: boolean;
   isLight?: boolean;
   ErrorTicketDom?: ReactElement;
+  getActiveName?: (name: string) => void;
+  getOverviewInfo?: (modal: any) => void;
+  responseDom?: string;
 }
 interface IStatisticsDesc {
   _type: string;
@@ -117,7 +120,10 @@ const QueryProfile: FC<IProps> = ({
   isNeedMetrics = false,
   isDemo = false,
   isLight = true,
+  getActiveName = null,
+  getOverviewInfo = null,
   ErrorTicketDom = <></>,
+  responseDom = 'body',
 }): ReactElement => {
   const [graphSize, setGraphSize] = useSafeState(0);
   const profileWrapRefCanvas = useRef(null);
@@ -212,6 +218,7 @@ const QueryProfile: FC<IProps> = ({
     };
     overviewInfoCurrent.current = info;
     setOverviewInfo(info);
+    getOverviewInfo(info);
   }
   function resetFitView() {
     const graph = graphRef?.current;
@@ -229,6 +236,12 @@ const QueryProfile: FC<IProps> = ({
     }
     setGraphSizeHeight(window.innerHeight - offsetHeight);
   };
+
+  useEffect(() => {
+    if (getActiveName) {
+      getActiveName(activeName);
+    }
+  }, [activeName]);
 
   useEffect(() => {
     if (outValue) {
@@ -264,7 +277,7 @@ const QueryProfile: FC<IProps> = ({
     handleResize();
     reshapeDOM(() => {
       handleResize();
-    });
+    }, responseDom);
   }, []);
   function setOverInfo(modal: any) {
     const {
@@ -282,7 +295,7 @@ const QueryProfile: FC<IProps> = ({
       errors,
     } = modal;
     setActiveName(id);
-    setOverviewInfo({
+    const info = {
       cpuTime,
       waitTime,
       totalTime,
@@ -296,7 +309,9 @@ const QueryProfile: FC<IProps> = ({
       id,
       metrics: modal?.metrics,
       errors,
-    });
+    };
+    setOverviewInfo(info);
+    getOverviewInfo(info);
   }
   function getAllNodes(graph: any) {
     return graph.getNodes();
@@ -655,6 +670,7 @@ const QueryProfile: FC<IProps> = ({
                     setActiveName('');
                     setIsTotalOverView(true);
                     setOverviewInfo(overviewInfoCurrent?.current);
+                    getOverviewInfo(overviewInfoCurrent?.current);
                     clearNodeActive(graph);
                   });
                   graph.on('canvas:dragstart', () => {
