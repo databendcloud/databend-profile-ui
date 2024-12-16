@@ -16,8 +16,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '18' # Change this to the Node.js version you're using
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@databendcloud' # Change this to your GitHub organization or username
 
       - name: yarn Install dependencies
         run: yarn
@@ -34,9 +32,3 @@ jobs:
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN_PROFILE }}
-
-      # - name: Deploy to GitHub Pages
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.DATABEND_CLOUD_NPM_TOKEN_PROFILE_UI }}
-      #     publish_dir: ./docs-dist # Change this to the directory you want to deploy
