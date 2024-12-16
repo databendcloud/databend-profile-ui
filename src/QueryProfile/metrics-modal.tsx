@@ -167,8 +167,13 @@ function dealsData(data) {
 
 interface IProps extends DrawerProps {
   metricsData: any[];
+  isLight: boolean;
 }
-const MetricsModal: FC<IProps> = ({ metricsData, ...props }): ReactElement => {
+const MetricsModal: FC<IProps> = ({
+  isLight,
+  metricsData,
+  ...props
+}): ReactElement => {
   const [isJson, setIsJson] = useState(false);
   const [haveDealDatas, setHaveDealDatas] = useState([]);
   useEffect(() => {
@@ -249,6 +254,7 @@ const MetricsModal: FC<IProps> = ({ metricsData, ...props }): ReactElement => {
                             <>
                               {item?.type ? (
                                 <MetriesChart
+                                  isLight={isLight}
                                   series={item?.data?.map((d, index) => {
                                     return {
                                       type: 'bar',

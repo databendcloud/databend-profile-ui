@@ -1,11 +1,29 @@
-:root {
+:root,
+html[data-prefers-color='light'] {
   --color-bg-1: #fff;
   --color-primary: rgb(1, 117, 246);
   --color-text-0: rgb(1, 14, 41);
   --color-text-1: rgba(12, 22, 43, 0.8);
-  --color-border: rgba(1, 14, 41, 0.08);
   --color-text-2: rgba(12, 22, 43, 0.6);
+  --color-text-3: rgba(12, 22, 43, 0.35);
+  --color-border: rgba(1, 14, 41, 0.08);
   --color-fill-0: rgba(220, 227, 239, 0.25);
   --color-fill-1: rgba(220, 227, 239, 0.4);
   --color-danger: rgb(247, 57, 32);
+  --node-heaer-color: #010e29;
+}
+
+:root.theme-dark.dark.dark-theme.dark-mode,
+html[data-prefers-color='dark'] {
+  --color-bg-1: rgb(18, 24, 38);
+  --color-primary: rgb(50, 147, 248);
+  --color-text-0: rgb(249, 249, 249);
+  --color-text-1: rgba(249, 249, 249, 0.8);
+  --color-text-2: rgba(249, 249, 249, 0.6);
+  --color-text-3: rgba(249, 249, 249, 0.35);
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-fill-0: rgba(121, 148, 191, 0.05);
+  --color-fill-1: rgba(255, 255, 255, 0.09);
+  --color-danger: rgb(247, 57, 32);
+  --node-heaer-color: #f9f9f9;
 }

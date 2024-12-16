@@ -41,6 +41,7 @@ interface IProps {
   initLoading?: boolean;
   isNeedMetrics?: boolean;
   isDemo?: boolean;
+  isLight?: boolean;
 }
 interface IStatisticsDesc {
   _type: string;
@@ -113,6 +114,7 @@ const QueryProfile: FC<IProps> = ({
   initLoading = false,
   isNeedMetrics = false,
   isDemo = false,
+  isLight = true,
 }): ReactElement => {
   const [graphSize, setGraphSize] = useSafeState(0);
   const profileWrapRefCanvas = useRef(null);
@@ -122,7 +124,6 @@ const QueryProfile: FC<IProps> = ({
   );
   const { reshapeDOM } = useReshape();
   const graphRef = useRef(undefined);
-  const isLight = true; ///useGetTheme();
   const [plainData, setPlainData] = useSafeState([]);
   const overviewInfoCurrent = useRef(undefined);
   const [isTotalOverview, setIsTotalOverView] = useSafeState(true);
@@ -699,6 +700,7 @@ const QueryProfile: FC<IProps> = ({
         )}
       </div>
       <MetricsModal
+        isLight={isLight}
         metricsData={overviewInfo?.metrics}
         title={`Metrics Details: ${overviewInfo?.name}[${overviewInfo?.id}]  ${overviewInfo?.totalTimePercent}`}
         onClose={() => setMetriesVisible(false)}

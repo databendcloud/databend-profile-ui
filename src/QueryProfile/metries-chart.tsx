@@ -63,15 +63,16 @@ interface IProps {
   series: ISerices[];
   legendData: string[];
   xData: any[];
+  isLight: boolean;
 }
 const MetriesChart: FC<IProps> = ({
   series,
   legendData,
   xData,
+  isLight,
 }): ReactElement => {
   const domRef = useRef(null);
   const { reshape } = useReshape();
-  const isLight = true;
   const lineColor = isLight
     ? 'rgba(1, 14, 41, 0.08)'
     : 'rgba(255, 255, 255, 0.08)';
