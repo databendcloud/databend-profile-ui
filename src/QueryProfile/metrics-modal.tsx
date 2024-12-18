@@ -4,8 +4,8 @@ import { Col, Collapse, Drawer, DrawerProps, Row, Space, Table } from 'antd';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import WhiteButton from '../Button/reset-white-button';
 import CardWrap from '../CardWrap';
-import CodeContent from '../CodeContent';
 import DatabendIcon from '../DatabendIcon';
+import DatabendJson from '../DatabendJson';
 import MetriesChart from './metries-chart';
 import './styles.less';
 const { Panel } = Collapse;
@@ -205,11 +205,7 @@ const MetricsModal: FC<IProps> = ({
     >
       <>
         {isJson ? (
-          <CodeContent
-            buttonText="Metrics"
-            isString={false}
-            content={JSON.stringify(metricsData)}
-          />
+          <DatabendJson src={metricsData}></DatabendJson>
         ) : (
           <Collapse
             className={'profile-metrics-collapseWrap'}

@@ -1,6 +1,6 @@
 {
   "name": "databend-profile-ui",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "description": "A react library developed with dumi",
   "license": "MIT",
   "module": "dist/index.js",
@@ -57,6 +57,7 @@
     "lodash-es": "^4.17.21",
     "numeral": "^2.0.6",
     "pretty-ms": "^8.0.0",
+    "react-json-view": "^1.21.3",
     "react-syntax-highlighter": "^15.6.1",
     "size-sensor": "^1.0.2",
     "thousands": "^1.0.1"

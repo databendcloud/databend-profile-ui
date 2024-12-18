@@ -30,7 +30,6 @@ offsetWidth?: number;
 offsetHeight?: number;
 showTextArea?: boolean;
 initLoading?: boolean;
-isNeedMetrics?: boolean;
 isDemo?: boolean;
 isLight?: boolean;
 ErrorTicketDom?: ReactElement;
