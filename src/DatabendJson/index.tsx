@@ -12,7 +12,7 @@ const DatabendJson: FC<ReactJsonViewProps> = ({ ...props }): ReactElement => {
       displayDataTypes={false}
       theme="ashes"
       {...props}
-      src={props?.src}
+      src={props?.src || {}}
     />
   );
 };
