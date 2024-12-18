@@ -1,6 +1,7 @@
 // Copyright 2024 DatabendLabs.
 import clsx from 'clsx';
 import React, { FC, ReactElement } from 'react';
+import './styles.less';
 interface IProps {
   icon?: string;
   className?: string;
