@@ -47,6 +47,7 @@ interface IProps {
   getActiveName?: (name: string) => void;
   getOverviewInfo?: (modal: any) => void;
   responseDom?: string;
+  isAdmin?: boolean;
 }
 interface IStatisticsDesc {
   _type: string;
@@ -123,6 +124,7 @@ const QueryProfile: FC<IProps> = ({
   getActiveName = null,
   getOverviewInfo = null,
   ErrorTicketDom = <></>,
+  isAdmin = false,
   responseDom = 'body',
 }): ReactElement => {
   const [graphSize, setGraphSize] = useSafeState(0);
@@ -267,9 +269,16 @@ const QueryProfile: FC<IProps> = ({
   }, [plainData, showTextArea]);
 
   useEffect(() => {
-    const filterStatisticsDescArray = overviewInfo?.statisticsDescArray?.filter(
-      (item) => item._value > 0 && item?.plain_statistics,
-    );
+    let filterStatisticsDescArray = [];
+    if (isAdmin) {
+      filterStatisticsDescArray = overviewInfo?.statisticsDescArray?.filter(
+        (item) => item._value > 0,
+      );
+    } else {
+      filterStatisticsDescArray = overviewInfo?.statisticsDescArray?.filter(
+        (item) => item._value > 0 && item?.plain_statistics,
+      );
+    }
     setFilterStatisticsDescArray(filterStatisticsDescArray);
   }, [overviewInfo?.statisticsDescArray]);
 
