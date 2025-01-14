@@ -268,7 +268,7 @@ const QueryProfile: FC<IProps> = ({
 
   useEffect(() => {
     const filterStatisticsDescArray = overviewInfo?.statisticsDescArray?.filter(
-      (item) => item._value > 0,
+      (item) => item._value > 0 && item?.plain_statistics,
     );
     setFilterStatisticsDescArray(filterStatisticsDescArray);
   }, [overviewInfo?.statisticsDescArray]);
