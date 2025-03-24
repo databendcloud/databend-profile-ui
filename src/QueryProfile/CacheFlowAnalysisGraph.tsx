@@ -169,6 +169,7 @@ const CacheFlowAnalysisGraph: FC<any> = ({
   overviewInfoCurrent,
   onReady,
   queryId = 'analysis',
+  onShare = undefined,
 }): ReactElement => {
   const handleResetView = () => {
     const graph = graphRef?.current;
@@ -237,6 +238,19 @@ const CacheFlowAnalysisGraph: FC<any> = ({
                 icon="databend-icon-xiazai_download-four"
               ></DatabendIcon>
             </span>
+            {onShare && (
+              <span
+                className="g-cursor g-box-c"
+                onClick={() => {
+                  onShare?.();
+                }}
+              >
+                <DatabendIcon
+                  size={16}
+                  icon="databend-icon-fenxiang_share-one"
+                ></DatabendIcon>
+              </span>
+            )}
           </div>
         );
       },

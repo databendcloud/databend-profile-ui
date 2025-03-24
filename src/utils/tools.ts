@@ -2,6 +2,8 @@ import numeral from 'numeral';
 import { format } from 'bytes';
 import prettyMilliseconds from 'pretty-ms';
 import thousands from 'thousands';
+// @ts-ignore
+import * as pako from 'pako';
 
 export function formatRows(value: number) {
   if (value <= 999) return value;
@@ -56,4 +58,35 @@ export function isValidJSON(str: string): boolean {
   } catch (error) {
     return false;
   }
+}
+
+// 压缩并编码函数
+export function compressAndEncode(jsonString: string) {
+  // 1. 使用 pako 压缩 JSON 字符串
+  const compressed = pako.gzip(jsonString);
+  // 2. 将压缩后的二进制数据转换为 Base64
+  const base64Encoded = btoa(String.fromCharCode.apply(null, compressed));
+  // 3. 替换为 URL 安全的字符（+ -> -, / -> _, 移除 =）
+  const urlSafeBase64 = base64Encoded.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  return urlSafeBase64;
+}
+
+// 解码并解压函数
+export function decodeAndDecompress(base64String: string) {
+  // 1. 将 URL 安全的 Base64 还原为标准 Base64
+  const standardBase64 = base64String?.replace(/-/g, '+')?.replace(/_/g, '/') ?? '';
+  // 2. Base64 解码为二进制字符串
+  const binaryString = atob(standardBase64);
+  // 3. 转换为 Uint8Array
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  // 4. 使用 pako 解压
+  const decompressed = pako.ungzip(bytes, { to: 'string' });
+  return decompressed;
+}
+export function getQueryParam(name: string) {
+  const match = window.location.search.match(new RegExp(`[?&]${name}=([^&]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
 }

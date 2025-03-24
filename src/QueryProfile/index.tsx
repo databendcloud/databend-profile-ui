@@ -48,6 +48,7 @@ interface IProps {
   getOverviewInfo?: (modal: any) => void;
   responseDom?: string;
   isAdmin?: boolean;
+  onShare?: () => void;
 }
 interface IStatisticsDesc {
   _type: string;
@@ -125,6 +126,7 @@ const QueryProfile: FC<IProps> = ({
   getOverviewInfo = null,
   ErrorTicketDom = <></>,
   isAdmin = false,
+  onShare = undefined,
   responseDom = 'body',
 }): ReactElement => {
   const [graphSize, setGraphSize] = useSafeState(0);
@@ -623,6 +625,7 @@ const QueryProfile: FC<IProps> = ({
           <>
             {plainData?.length > 0 ? (
               <CacheFlowAnalysisGraph
+                onShare={onShare}
                 queryId={queryId}
                 plainData={plainData}
                 graphSize={graphSize}

@@ -1,6 +1,13 @@
 // Copyright 2023 DatabendLabs.
-import { Button, Input, Space } from 'antd';
-import { isValidJSON } from 'databend-profile-ui/utils/tools';
+import { useMount } from 'ahooks';
+import { Button, Input, message, Space } from 'antd';
+import copy from 'copy-text-to-clipboard';
+import {
+  compressAndEncode,
+  decodeAndDecompress,
+  getQueryParam,
+  isValidJSON,
+} from 'databend-profile-ui/utils/tools';
 import React, { FC, ReactElement, useState } from 'react';
 import QueryProfile from '.';
 import DatabendIcon from '../DatabendIcon';
@@ -11,15 +18,25 @@ const { TextArea } = Input;
 interface TestProfileProps {
   isDemo?: boolean;
   isNeedMetrics?: boolean;
+  canShare?: boolean;
 }
 const TestProfile: FC<TestProfileProps> = ({
   isDemo = false,
   isNeedMetrics = false,
+  canShare = false,
 }): ReactElement => {
   const [value, setValue] = useState<any | undefined>('');
   const [queryId, setQueryId] = useState('');
   const [count, setCount] = useState(0);
   const [selfHidden, setSelfHidden] = useState(false);
+  useMount(() => {
+    if (canShare) {
+      const v = decodeAndDecompress(getQueryParam('value') as string);
+      if (v) {
+        setValue(v);
+      }
+    }
+  });
   function show() {
     setCount(count + 1);
     try {
@@ -35,7 +52,7 @@ const TestProfile: FC<TestProfileProps> = ({
         {!selfHidden && (
           <>
             <TextArea
-              placeholder="请把你生成的 profile 日志json粘进来"
+              placeholder="Please copy the profile log json you generated"
               className="g-border-radius-middle g-border g-color-bg-1"
               value={value}
               onChange={(e) => {
@@ -102,6 +119,19 @@ const TestProfile: FC<TestProfileProps> = ({
 
       <div className="g-pa-6 g-color-bg-1 g-box-flex g-border-radius-middle">
         <QueryProfile
+          onShare={
+            canShare
+              ? () => {
+                  copy(
+                    window.location.origin +
+                      window.location.pathname +
+                      '?value=' +
+                      compressAndEncode(value),
+                  );
+                  message.success('Copied to clipboard');
+                }
+              : undefined
+          }
           offsetWidth={
             isDemo ? (selfHidden ? 900 : 1200) : selfHidden ? 100 : 695
           }
