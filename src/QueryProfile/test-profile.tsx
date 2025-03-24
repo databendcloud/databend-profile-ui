@@ -19,11 +19,13 @@ interface TestProfileProps {
   isDemo?: boolean;
   isNeedMetrics?: boolean;
   canShare?: boolean;
+  showBack?: boolean;
 }
 const TestProfile: FC<TestProfileProps> = ({
   isDemo = false,
   isNeedMetrics = false,
   canShare = false,
+  showBack = true,
 }): ReactElement => {
   const [value, setValue] = useState<any | undefined>('');
   const [queryId, setQueryId] = useState('');
@@ -62,9 +64,12 @@ const TestProfile: FC<TestProfileProps> = ({
             ></TextArea>
             <Space className="g-box-center-between">
               <Space>
-                <Button type="link" href="/">
-                  Back
-                </Button>
+                {showBack && (
+                  <Button type="link" href="/">
+                    Back
+                  </Button>
+                )}
+
                 <Button
                   type="dashed"
                   onClick={() => {
