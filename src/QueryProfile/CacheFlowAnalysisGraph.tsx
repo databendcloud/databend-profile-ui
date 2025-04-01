@@ -106,7 +106,7 @@ function mapEdgesLineWidth(edges: any) {
 }
 function getDealData(plainData: any) {
   let outputRowsIndex = -1;
-  plainData.sort((a: any, b: any) => Number(b?.id) - Number(a?.id));
+  plainData.sort((a: any, b: any) => Number(a?.id - Number(b?.id)));
   const data = plainData?.map((node: any) => {
     const { title, name, id, statisticsDescArray } = node;
     if (outputRowsIndex === -1) {
