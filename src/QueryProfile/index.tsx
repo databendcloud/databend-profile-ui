@@ -716,6 +716,9 @@ const QueryProfile: FC<IProps> = ({
                     }
                   });
                   graph.on('edge:mouseleave', () => {
+                    if (profileWrapRefCanvas.current) {
+                      profileWrapRefCanvas.current.style.cursor = 'move';
+                    }
                     resetToolTipInfo();
                   });
                 }}
