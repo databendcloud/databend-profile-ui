@@ -136,6 +136,7 @@ function getDealData(plainData: any) {
 }
 function getEdges(plainData: any) {
   let outputRowsIndex = -1;
+  plainData.sort((a: any, b: any) => Number(a?.id) - Number(b?.id));
   return plainData?.map((node: any) => {
     const statisticsDescArray = node?.statisticsDescArray;
     if (outputRowsIndex === -1) {
