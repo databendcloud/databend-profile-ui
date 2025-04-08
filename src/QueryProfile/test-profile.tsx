@@ -122,7 +122,10 @@ const TestProfile: FC<TestProfileProps> = ({
         ></Button>
       </Space>
 
-      <div className="g-pa-6 g-color-bg-1 g-box-flex g-border-radius-middle">
+      <div
+        className="g-pa-6 g-color-bg-1 g-box-flex g-border-radius-middle"
+        style={{ cursor: 'pointer' }}
+      >
         <QueryProfile
           onShare={
             canShare

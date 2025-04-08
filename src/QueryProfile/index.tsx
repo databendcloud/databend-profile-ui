@@ -271,6 +271,17 @@ const QueryProfile: FC<IProps> = ({
   }, [plainData, showTextArea]);
 
   useEffect(() => {
+    if (profileWrapRef.current && plainData?.length > 0) {
+      const canvas = profileWrapRef.current.querySelector('canvas');
+      if (canvas) {
+        profileWrapRefCanvas.current = canvas;
+      } else {
+        console.warn('No canvas found inside profileWrapRef');
+      }
+    }
+  }, [plainData]);
+
+  useEffect(() => {
     let filterStatisticsDescArray = [];
     if (isAdmin) {
       filterStatisticsDescArray = overviewInfo?.statisticsDescArray?.filter(
@@ -656,11 +667,9 @@ const QueryProfile: FC<IProps> = ({
                     setNodeActive(graph, node);
                   });
                   graph.on('node:mouseleave', () => {
-                    if (!profileWrapRefCanvas.current) {
-                      profileWrapRefCanvas.current =
-                        document.getElementsByTagName('canvas')[0];
+                    if (profileWrapRefCanvas.current) {
+                      profileWrapRefCanvas.current.style.cursor = 'move';
                     }
-                    profileWrapRefCanvas.current.style.cursor = 'move';
                     resetToolTipInfo();
                   });
                   graph.on('node:mouseover', (e) => {

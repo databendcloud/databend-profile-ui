@@ -106,7 +106,7 @@ function mapEdgesLineWidth(edges: any) {
 }
 function getDealData(plainData: any) {
   let outputRowsIndex = -1;
-  plainData.sort((a: any, b: any) => Number(a?.id - Number(b?.id)));
+  plainData.sort((a, b) => a.id.localeCompare(b.id));
   const data = plainData?.map((node: any) => {
     const { title, name, id, statisticsDescArray } = node;
     if (outputRowsIndex === -1) {
@@ -195,6 +195,7 @@ const CacheFlowAnalysisGraph: FC<any> = ({
     layout: {
       rankdir: 'TB',
       ranksepFunc: () => 20,
+      sortBy: 'id',
     },
     tooltipCfg: {
       show: false,
@@ -453,7 +454,13 @@ const CacheFlowAnalysisGraph: FC<any> = ({
         show: data.edges.filter((item: any) => item.source === cfg.id)?.length,
       };
     },
-    behaviors: ['drag-canvas', 'zoom-canvas'], // 'drag-node'
+    behaviors: [
+      'drag-canvas',
+      {
+        type: 'zoom-canvas',
+        sensitivity: 0.15, // 设置缩放灵敏度
+      },
+    ], // 'drag-node'
   };
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
