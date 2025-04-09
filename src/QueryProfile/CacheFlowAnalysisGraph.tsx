@@ -459,7 +459,7 @@ const CacheFlowAnalysisGraph: FC<any> = ({
       'drag-canvas',
       {
         type: 'zoom-canvas',
-        sensitivity: 0.15, // 设置缩放灵敏度
+        sensitivity: 0.4, // 设置缩放灵敏度
       },
     ], // 'drag-node'
   };
