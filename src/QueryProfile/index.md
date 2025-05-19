@@ -5,7 +5,12 @@ import { QueryProfile } from 'databend-profile-ui';
 import { DEMO } from './demo';
 
 export default () => (
-  <QueryProfile isDemo={true} outValue={JSON.parse(DEMO)} profileRef={'body'} />
+  <QueryProfile
+    isDemo={true}
+    outValue={JSON.parse(DEMO)}
+    isNeedMetrics
+    profileRef={'body'}
+  />
 );
 ```
 

@@ -9,6 +9,8 @@ export function useReshape() {
     }
   });
   function reshape(myChart: any, dom = 'body') {
+    const targetDom = document?.querySelector(dom);
+    if (!targetDom) return;
     bindChartResize = bind(document?.querySelector(dom) as HTMLElement, () => {
       myChart.resize({
         animation: {
