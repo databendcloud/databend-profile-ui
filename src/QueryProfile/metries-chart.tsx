@@ -123,6 +123,11 @@ const MetriesChart: FC<IProps> = ({
     myChart.setOption(option);
     reshape(myChart, 'body');
   });
-  return <div style={{ height: '280px', width: '100%' }} ref={domRef}></div>;
+  return (
+    <div
+      style={{ height: '280px', width: '100%', minWidth: '500px' }}
+      ref={domRef}
+    />
+  );
 };
 export default memo(MetriesChart);
