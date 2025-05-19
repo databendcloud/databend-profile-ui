@@ -169,6 +169,7 @@ interface IProps extends DrawerProps {
   metricsData: any[];
   isLight: boolean;
   drawerWidth?: string | number;
+  reshapeDOM?: string;
 }
 const MetricsModal: FC<IProps> = ({
   isLight,

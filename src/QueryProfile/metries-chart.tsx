@@ -121,13 +121,10 @@ const MetriesChart: FC<IProps> = ({
       series: series as any[],
     };
     myChart.setOption(option);
-    reshape(myChart, 'body');
+    setTimeout(() => {
+      reshape(myChart, '.profile-metrics-collapseWrap');
+    }, 100);
   });
-  return (
-    <div
-      style={{ height: '280px', width: '100%', minWidth: '500px' }}
-      ref={domRef}
-    />
-  );
+  return <div style={{ height: '280px', width: '100%' }} ref={domRef} />;
 };
 export default memo(MetriesChart);
