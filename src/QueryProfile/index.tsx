@@ -49,6 +49,7 @@ interface IProps {
   responseDom?: string;
   isAdmin?: boolean;
   onShare?: () => void;
+  drawerWidth?: number | string;
 }
 interface IStatisticsDesc {
   _type: string;
@@ -128,6 +129,7 @@ const QueryProfile: FC<IProps> = ({
   isAdmin = false,
   onShare = undefined,
   responseDom = 'body',
+  drawerWidth = '100vw',
 }): ReactElement => {
   const [graphSize, setGraphSize] = useSafeState(0);
   const profileWrapRefCanvas = useRef(null);
@@ -744,11 +746,12 @@ const QueryProfile: FC<IProps> = ({
         )}
       </div>
       <MetricsModal
+        drawerWidth={drawerWidth}
         isLight={isLight}
         metricsData={overviewInfo?.metrics}
         title={`Metrics Details: ${overviewInfo?.name}[${overviewInfo?.id}]  ${overviewInfo?.totalTimePercent}`}
         onClose={() => setMetriesVisible(false)}
-        visible={metriesVisible}
+        open={metriesVisible}
       />
     </>
   );

@@ -8,7 +8,7 @@ import DatabendIcon from '../DatabendIcon';
 import DatabendJson from '../DatabendJson';
 import MetriesChart from './metries-chart';
 import './styles.less';
-const { Panel } = Collapse;
+// const { Panel } = Collapse;
 
 interface IMetrics {
   columns?: any[];
@@ -168,14 +168,17 @@ function dealsData(data) {
 interface IProps extends DrawerProps {
   metricsData: any[];
   isLight: boolean;
+  drawerWidth?: string | number;
 }
 const MetricsModal: FC<IProps> = ({
   isLight,
   metricsData,
+  drawerWidth = '100vw',
   ...props
 }): ReactElement => {
   const [isJson, setIsJson] = useState(false);
   const [haveDealDatas, setHaveDealDatas] = useState([]);
+
   useEffect(() => {
     if (metricsData) {
       const data = Object.entries(metricsData);
@@ -183,10 +186,77 @@ const MetricsModal: FC<IProps> = ({
       setHaveDealDatas(haveDealDatas);
     }
   }, [metricsData]);
+
+  const collapseItems = haveDealDatas?.map((out, index) => {
+    const len = out?.data?.length;
+    const isOdd = len % 2 !== 0;
+    return {
+      key: index.toString(),
+      label: (
+        <div className="profile-metrics-header">
+          Machine {index + 1}:{out?.machine}
+        </div>
+      ),
+      children: (
+        <Row gutter={[16, 16]} className="profile-metrics-row">
+          {out?.data.map((item: IMetrics, innerIndex) => {
+            return (
+              <Col
+                {...{
+                  xl: 12,
+                  xxl: 12,
+                  lg: 24,
+                  md: 24,
+                  sm: 24,
+                  xs: 24,
+                }}
+                className="profile-metrics-col"
+                span={isOdd && len - 1 === innerIndex ? 24 : 12}
+                key={`${index}_${item?.name}_${innerIndex}`}
+              >
+                <div className="profile-metrics-name">{item?.name}</div>
+                {item?.data ? (
+                  <>
+                    {item?.type ? (
+                      <MetriesChart
+                        isLight={isLight}
+                        series={item?.data?.map((d, idx) => {
+                          return {
+                            type: 'bar',
+                            data: d,
+                            name: item?.labelsArr[idx]?._tag,
+                          };
+                        })}
+                        legendData={item?.labelsArr?.map((item) => item?._tag)}
+                        xData={item?.columns}
+                      />
+                    ) : (
+                      <Table
+                        rowKey={(record) =>
+                          record?.key || 'row-key-' + Math.random()
+                        }
+                        className="profile-metrics-table"
+                        pagination={false}
+                        dataSource={item?.data}
+                        columns={item?.columns}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <CardWrap>{JSON.stringify(item?.value)}</CardWrap>
+                )}
+              </Col>
+            );
+          })}
+        </Row>
+      ),
+    };
+  });
+
   return (
     <Drawer
       destroyOnClose
-      width={'100vw'}
+      width={drawerWidth}
       {...props}
       title={
         <Space>
@@ -212,81 +282,14 @@ const MetricsModal: FC<IProps> = ({
             expandIconPosition="start"
             defaultActiveKey={Array.from(
               { length: haveDealDatas?.length + 1 },
-              (_, i) => i,
+              (_, i) => i.toString(), // Keys must be strings
             )}
-          >
-            {haveDealDatas?.map((out, index) => {
-              const len = out?.data?.length;
-              const isOdd = len % 2 !== 0;
-              return (
-                <Panel
-                  key={index}
-                  header={
-                    <div className="profile-metrics-header">
-                      Machine {index + 1}:{out?.machine}
-                    </div>
-                  }
-                >
-                  <Row gutter={[16, 16]} className="profile-metrics-row">
-                    {out?.data.map((item: IMetrics, index) => {
-                      return (
-                        <Col
-                          {...{
-                            xl: 12,
-                            xxl: 12,
-                            lg: 24,
-                            md: 24,
-                            sm: 24,
-                            xs: 24,
-                          }}
-                          className="profile-metrics-col"
-                          span={isOdd && len - 1 === index ? 24 : 12}
-                          key={index}
-                        >
-                          <div className="profile-metrics-name">
-                            {item?.name}
-                          </div>
-                          {item?.data ? (
-                            <>
-                              {item?.type ? (
-                                <MetriesChart
-                                  isLight={isLight}
-                                  series={item?.data?.map((d, index) => {
-                                    return {
-                                      type: 'bar',
-                                      data: d,
-                                      name: item?.labelsArr[index]?._tag,
-                                    };
-                                  })}
-                                  legendData={item?.labelsArr?.map(
-                                    (item) => item?._tag,
-                                  )}
-                                  xData={item?.columns}
-                                />
-                              ) : (
-                                <Table
-                                  key={'key'}
-                                  className="profile-metrics-table"
-                                  pagination={false}
-                                  dataSource={item?.data}
-                                  columns={item?.columns}
-                                />
-                              )}
-                            </>
-                          ) : (
-                            <CardWrap>{JSON.stringify(item?.value)}</CardWrap>
-                          )}
-                        </Col>
-                      );
-                    })}
-                  </Row>
-                </Panel>
-              );
-            })}
-          </Collapse>
+            items={collapseItems} // Use items instead of children
+          />
         )}
       </>
     </Drawer>
   );
 };
+
 export default MetricsModal;
