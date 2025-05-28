@@ -4,6 +4,7 @@ import prettyMilliseconds from 'pretty-ms';
 import thousands from 'thousands';
 // @ts-ignore
 import * as pako from 'pako';
+import { message } from 'antd';
 
 export function formatRows(value: number) {
   if (value <= 999) return value;
@@ -56,6 +57,7 @@ export function isValidJSON(str: string): boolean {
     JSON.parse(str);
     return true;
   } catch (error) {
+    message.error('Invalid JSON string，May be caused by multiple profiles');
     return false;
   }
 }
