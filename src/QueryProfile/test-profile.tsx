@@ -47,7 +47,6 @@ const TestProfile: FC<TestProfileProps> = ({
       setQueryId(JSON.parse(value)?.query_id);
     } catch (error) {}
   }
-  // Handle file selection and read content
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
