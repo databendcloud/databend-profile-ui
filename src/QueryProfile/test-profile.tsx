@@ -1,4 +1,5 @@
-// Copyright 2023 DatabendLabs.
+// Copyright 2025 DatabendLabs.
+import { UploadOutlined } from '@ant-design/icons';
 import { useMount } from 'ahooks';
 import { Button, Input, message, Space } from 'antd';
 import copy from 'copy-text-to-clipboard';
@@ -8,7 +9,7 @@ import {
   getQueryParam,
   isValidJSON,
 } from 'databend-profile-ui/utils/tools';
-import React, { FC, ReactElement, useState } from 'react';
+import React, { FC, ReactElement, useRef, useState } from 'react';
 import QueryProfile from '.';
 import DatabendIcon from '../DatabendIcon';
 import { DEMO } from './demo';
@@ -27,6 +28,7 @@ const TestProfile: FC<TestProfileProps> = ({
   canShare = false,
   showBack = true,
 }): ReactElement => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState<any | undefined>('');
   const [queryId, setQueryId] = useState('');
   const [count, setCount] = useState(0);
@@ -45,6 +47,30 @@ const TestProfile: FC<TestProfileProps> = ({
       setQueryId(JSON.parse(value)?.query_id);
     } catch (error) {}
   }
+  // Handle file selection and read content
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target?.result as string;
+          setValue(content);
+          message.success('File content loaded successfully');
+        };
+        reader.onerror = () => {
+          message.error('Failed to read the file');
+        };
+        reader.readAsText(file);
+      } else {
+        message.error('Please select a non-image file');
+      }
+      event.target.value = '';
+    }
+  };
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
   return (
     <div
       className="g-pa-24 g-align-s site-layout-right"
@@ -53,6 +79,25 @@ const TestProfile: FC<TestProfileProps> = ({
       <Space size={12} className="g-pl-10 g-pr" direction="vertical">
         {!selfHidden && (
           <>
+            <UploadOutlined
+              style={{
+                fontSize: '18px',
+                color: 'var(--color-text-2)',
+                right: '10px',
+                top: '30px',
+                position: 'absolute',
+                zIndex: 1,
+                cursor: 'pointer',
+              }}
+              onClick={triggerFileInput}
+            />
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={handleFileUpload}
+              accept="application/json,text/plain,.ts,.tsx,.sql,.csv" // Restrict to common text-based formats
+            />
             <TextArea
               placeholder="Please copy the profile log json you generated"
               className="g-border-radius-middle g-border g-color-bg-1"
@@ -61,7 +106,7 @@ const TestProfile: FC<TestProfileProps> = ({
                 setValue(e.target.value);
               }}
               style={{ width: '320px', height: 'calc(100vh - 100px)' }}
-            ></TextArea>
+            />
             <Space className="g-box-center-between">
               <Space>
                 {showBack && (
