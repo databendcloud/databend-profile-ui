@@ -51,6 +51,8 @@ interface IProps {
   isAdmin?: boolean;
   onShare?: () => void;
   drawerWidth?: number | string;
+  outGraphWidth?: number | undefined;
+  outGraphHeight?: number | undefined;
 }
 interface IStatisticsDesc {
   _type: string;
@@ -131,6 +133,8 @@ const QueryProfile: FC<IProps> = ({
   onShare = undefined,
   responseDom = 'body',
   drawerWidth = '100vw',
+  outGraphWidth = undefined,
+  outGraphHeight = undefined,
 }): ReactElement => {
   const [graphSize, setGraphSize] = useSafeState(0);
   const profileWrapRefCanvas = useRef(null);
@@ -234,6 +238,11 @@ const QueryProfile: FC<IProps> = ({
     }
   }
   const handleResize = () => {
+    if (outGraphWidth && outGraphHeight) {
+      setGraphSize(outGraphWidth - offsetWidth);
+      setGraphSizeHeight(outGraphHeight - offsetHeight);
+      return;
+    }
     if (profileRef) {
       if (isDemo) {
         setGraphSize(700);
