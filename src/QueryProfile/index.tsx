@@ -280,9 +280,10 @@ const QueryProfile: FC<IProps> = ({
 
   useEffect(() => {
     if (plainData?.length) {
-      setTimeout(() => {
+      handleResize();
+      reshapeDOM(() => {
         handleResize();
-      }, 10);
+      }, responseDom);
     }
   }, [plainData, showTextArea, outGraphWidth, outGraphHeight]);
 
