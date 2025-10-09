@@ -282,7 +282,7 @@ const QueryProfile: FC<IProps> = ({
     if (plainData?.length) {
       handleResize();
     }
-  }, [plainData, showTextArea]);
+  }, [plainData, showTextArea, outGraphWidth, outGraphHeight]);
 
   useEffect(() => {
     if (profileWrapRef?.current && plainData?.length > 0) {
