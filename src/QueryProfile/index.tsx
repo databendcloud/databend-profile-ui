@@ -280,7 +280,9 @@ const QueryProfile: FC<IProps> = ({
 
   useEffect(() => {
     if (plainData?.length) {
-      handleResize();
+      setTimeout(() => {
+        handleResize();
+      }, 10);
     }
   }, [plainData, showTextArea, outGraphWidth, outGraphHeight]);
 
@@ -661,10 +663,9 @@ const QueryProfile: FC<IProps> = ({
                   canShare
                     ? () => {
                         copy(
-                          window.location.origin +
-                            window.location.pathname +
+                          'https://profile.databend.com/' +
                             '?value=' +
-                            compressAndEncode(outValue),
+                            compressAndEncode(JSON.stringify(outValue)),
                         );
                         message.success('Copied to clipboard');
                       }
