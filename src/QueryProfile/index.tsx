@@ -664,7 +664,7 @@ const QueryProfile: FC<IProps> = ({
                           window.location.origin +
                             window.location.pathname +
                             '?value=' +
-                            compressAndEncode(value),
+                            compressAndEncode(outValue),
                         );
                         message.success('Copied to clipboard');
                       }
