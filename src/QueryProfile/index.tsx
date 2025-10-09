@@ -1,5 +1,6 @@
 // Copyright 2024 DatabendLabs.
 // @ts-nocheck
+import '@ant-design/v5-patch-for-react-19';
 import { useSafeState } from 'ahooks';
 import clsx from 'clsx';
 import React, { FC, memo, ReactElement, useEffect, useRef } from 'react';
