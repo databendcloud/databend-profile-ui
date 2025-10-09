@@ -3,6 +3,7 @@
 import '@ant-design/v5-patch-for-react-19';
 import { useSafeState } from 'ahooks';
 import clsx from 'clsx';
+import copy from 'copy-text-to-clipboard';
 import React, { FC, memo, ReactElement, useEffect, useRef } from 'react';
 import {
   compressAndEncode,
