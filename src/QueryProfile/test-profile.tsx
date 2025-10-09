@@ -2,9 +2,7 @@
 import { UploadOutlined } from '@ant-design/icons';
 import { useMount } from 'ahooks';
 import { Button, Input, message, Space } from 'antd';
-import copy from 'copy-text-to-clipboard';
 import {
-  compressAndEncode,
   decodeAndDecompress,
   getQueryParam,
   isValidJSON,
@@ -171,19 +169,7 @@ const TestProfile: FC<TestProfileProps> = ({
         style={{ cursor: 'pointer' }}
       >
         <QueryProfile
-          onShare={
-            canShare
-              ? () => {
-                  copy(
-                    window.location.origin +
-                      window.location.pathname +
-                      '?value=' +
-                      compressAndEncode(value),
-                  );
-                  message.success('Copied to clipboard');
-                }
-              : undefined
-          }
+          canShare={canShare}
           offsetWidth={
             isDemo ? (selfHidden ? 900 : 1200) : selfHidden ? 100 : 695
           }
