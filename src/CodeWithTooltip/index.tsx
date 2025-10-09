@@ -1,7 +1,7 @@
-import React, { FC, ReactElement, ReactNode } from 'react';
-import styles from './styles.module.less';
 import { Tooltip } from 'antd';
+import React, { FC, ReactElement, ReactNode } from 'react';
 import CodeContent from '../CodeContent';
+import styles from './styles.module.less';
 
 interface IProps {
   content: string;
@@ -10,21 +10,28 @@ interface IProps {
   [key: string]: any;
 }
 
-const CodeWithTooltip: FC<IProps> = ({ content, children, buttonText, ...props }): ReactElement => {
+const CodeWithTooltip: FC<IProps> = ({
+  content,
+  children,
+  buttonText = 'Failed Text',
+  ...props
+}): ReactElement => {
   return (
     <Tooltip
-      overlayClassName={styles.errorTip}
-      overlayInnerStyle={{ padding: 0 }}
-      title={<CodeContent buttonText={buttonText} content={content ? content : ''} />}
+      classNames={{
+        root: styles.errorTip,
+      }}
+      styles={{
+        body: { padding: 0 },
+      }}
+      title={
+        <CodeContent buttonText={buttonText} content={content ? content : ''} />
+      }
       {...props}
     >
       {children}
     </Tooltip>
   );
-};
-
-CodeWithTooltip.defaultProps = {
-  buttonText: 'Failed Text',
 };
 
 export default CodeWithTooltip;
