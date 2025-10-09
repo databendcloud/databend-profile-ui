@@ -5,6 +5,7 @@ import { useSafeState } from 'ahooks';
 import clsx from 'clsx';
 import React, { FC, memo, ReactElement, useEffect, useRef } from 'react';
 import {
+  compressAndEncode,
   filterMillisecond,
   filterSize,
   getPercent,
@@ -49,10 +50,10 @@ interface IProps {
   getOverviewInfo?: (modal: any) => void;
   responseDom?: string;
   isAdmin?: boolean;
-  onShare?: () => void;
   drawerWidth?: number | string;
   outGraphWidth?: number | undefined;
   outGraphHeight?: number | undefined;
+  canShare?: boolean;
 }
 interface IStatisticsDesc {
   _type: string;
@@ -130,11 +131,11 @@ const QueryProfile: FC<IProps> = ({
   getOverviewInfo = null,
   ErrorTicketDom = <></>,
   isAdmin = false,
-  onShare = undefined,
   responseDom = 'body',
   drawerWidth = '100vw',
   outGraphWidth = undefined,
   outGraphHeight = undefined,
+  canShare = false,
 }): ReactElement => {
   const [graphSize, setGraphSize] = useSafeState(0);
   const profileWrapRefCanvas = useRef(null);
@@ -655,7 +656,19 @@ const QueryProfile: FC<IProps> = ({
           <>
             {plainData?.length > 0 ? (
               <CacheFlowAnalysisGraph
-                onShare={onShare}
+                onShare={
+                  canShare
+                    ? () => {
+                        copy(
+                          window.location.origin +
+                            window.location.pathname +
+                            '?value=' +
+                            compressAndEncode(value),
+                        );
+                        message.success('Copied to clipboard');
+                      }
+                    : undefined
+                }
                 queryId={queryId}
                 plainData={plainData}
                 graphSize={graphSize}
