@@ -507,7 +507,7 @@ const QueryProfile: FC<IProps> = ({
                   <div className="profile-common-styles-bcpc">
                     <span>
                       {isAdmin ? (
-                        <Tooltip title="The total time of CPU and IO for all nodes">
+                        <Tooltip title="The total time of CPU and IO for all nodes.">
                           <span style={{ cursor: 'help' }}>
                             Total Execution Time
                           </span>
