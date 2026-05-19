@@ -505,15 +505,29 @@ const QueryProfile: FC<IProps> = ({
                   </>
                 ) : (
                   <div className="profile-common-styles-bcpc">
-                    <span>Total Execution Time</span>
+                    <span>
+                      {isAdmin ? (
+                        <Tooltip title="The total time of CPU and IO for all nodes">
+                          <span style={{ cursor: 'help' }}>
+                            Total Execution Time
+                          </span>
+                        </Tooltip>
+                      ) : (
+                        ' '
+                      )}
+                    </span>
                     <span className="profile-index-color-text-1">
-                      <span className="profile-index-color-text-2">
-                        (
-                        {outValue
-                          ? filterMillisecond(overviewInfo?.totalTime / 1000000)
-                          : filterMillisecond(queryDuration)}
-                        )
-                      </span>{' '}
+                      {isAdmin ? (
+                        <span className="profile-index-color-text-2">
+                          (
+                          {outValue
+                            ? filterMillisecond(
+                                overviewInfo?.totalTime / 1000000,
+                              )
+                            : filterMillisecond(queryDuration)}
+                          )
+                        </span>
+                      ) : null}
                       {overviewInfo?.totalTimePercent}
                     </span>
                   </div>
