@@ -1,5 +1,4 @@
 # databend-profile-ui
-
 ## Install
 
 ```bash

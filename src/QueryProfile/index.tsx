@@ -1,9 +1,12 @@
 // Copyright 2024 DatabendLabs.
 // @ts-nocheck
+import '@ant-design/v5-patch-for-react-19';
 import { useSafeState } from 'ahooks';
 import clsx from 'clsx';
+import copy from 'copy-text-to-clipboard';
 import React, { FC, memo, ReactElement, useEffect, useRef } from 'react';
 import {
+  compressAndEncode,
   filterMillisecond,
   filterSize,
   getPercent,
@@ -48,8 +51,10 @@ interface IProps {
   getOverviewInfo?: (modal: any) => void;
   responseDom?: string;
   isAdmin?: boolean;
-  onShare?: () => void;
   drawerWidth?: number | string;
+  outGraphWidth?: number | undefined;
+  outGraphHeight?: number | undefined;
+  canShare?: boolean;
 }
 interface IStatisticsDesc {
   _type: string;
@@ -127,9 +132,11 @@ const QueryProfile: FC<IProps> = ({
   getOverviewInfo = null,
   ErrorTicketDom = <></>,
   isAdmin = false,
-  onShare = undefined,
   responseDom = 'body',
   drawerWidth = '100vw',
+  outGraphWidth = undefined,
+  outGraphHeight = undefined,
+  canShare = false,
 }): ReactElement => {
   const [graphSize, setGraphSize] = useSafeState(0);
   const profileWrapRefCanvas = useRef(null);
@@ -229,10 +236,15 @@ const QueryProfile: FC<IProps> = ({
   function resetFitView() {
     const graph = graphRef?.current;
     if (graph) {
-      graph?.fitView();
+      graphRef.current.fitView();
     }
   }
   const handleResize = () => {
+    if (outGraphWidth && outGraphHeight) {
+      setGraphSize(outGraphWidth - offsetWidth);
+      setGraphSizeHeight(outGraphHeight - offsetHeight);
+      return;
+    }
     if (profileRef) {
       if (isDemo) {
         setGraphSize(700);
@@ -261,7 +273,7 @@ const QueryProfile: FC<IProps> = ({
   }, [countShow, outValue]);
 
   useEffect(() => {
-    if (initLoading && graphRef.current) {
+    if (initLoading && graphRef?.current) {
       resetFitView();
     }
   }, [initLoading]);
@@ -269,16 +281,21 @@ const QueryProfile: FC<IProps> = ({
   useEffect(() => {
     if (plainData?.length) {
       handleResize();
+      reshapeDOM(() => {
+        handleResize();
+      }, responseDom);
     }
-  }, [plainData, showTextArea]);
+  }, [plainData, showTextArea, outGraphWidth, outGraphHeight]);
 
   useEffect(() => {
-    if (profileWrapRef.current && plainData?.length > 0) {
+    if (profileWrapRef?.current && plainData?.length > 0) {
       const canvas = profileWrapRef.current.querySelector('canvas');
-      if (canvas) {
+      if (canvas && profileWrapRefCanvas?.current) {
         profileWrapRefCanvas.current = canvas;
       } else {
-        console.warn('No canvas found inside profileWrapRef');
+        console.warn(
+          'No canvas found inside profileWrapRef or profileWrapRefCanvas is null',
+        );
       }
     }
   }, [plainData]);
@@ -338,14 +355,19 @@ const QueryProfile: FC<IProps> = ({
     getOverviewInfo?.(info);
   }
   function getAllNodes(graph: any) {
-    return graph.getNodes();
+    return graph?.getNodes() || [];
   }
   function setNodeActive(graph: any, node: any) {
-    graph.setItemState(node, 'highlight', true);
+    if (graph && node) {
+      graph.setItemState(node, 'highlight', true);
+    }
   }
   function clearNodeActive(graph: any) {
-    getAllNodes(graph).forEach((n: any) => {
-      graph.clearItemStates(n);
+    const nodes = getAllNodes(graph);
+    nodes.forEach((n: any) => {
+      if (graph) {
+        graph.clearItemStates(n);
+      }
     });
   }
   function resetToolTipInfo() {
@@ -386,7 +408,7 @@ const QueryProfile: FC<IProps> = ({
                             isNode: true,
                           });
                           setIsTotalOverView(false);
-                          const graph = graphRef.current;
+                          const graph = graphRef?.current;
                           const nodes = graph?.cfg.nodes;
                           const node = nodes?.find(
                             (node) => node?._cfg.id === id,
@@ -402,7 +424,7 @@ const QueryProfile: FC<IProps> = ({
                           // 平移画布，使得节点位于画布中心
                           clearNodeActive(graph);
                           setNodeActive(graph, node);
-                          if (nodes?.length > 1) {
+                          if (nodes?.length > 1 && graph) {
                             graph.moveTo(offsetX, offsetY);
                           }
                         }}
@@ -483,15 +505,29 @@ const QueryProfile: FC<IProps> = ({
                   </>
                 ) : (
                   <div className="profile-common-styles-bcpc">
-                    <span>Total Execution Time</span>
+                    <span>
+                      {isAdmin ? (
+                        <Tooltip title="The total time of CPU and IO for all nodes">
+                          <span style={{ cursor: 'help' }}>
+                            Total Execution Time
+                          </span>
+                        </Tooltip>
+                      ) : (
+                        ' '
+                      )}
+                    </span>
                     <span className="profile-index-color-text-1">
-                      <span className="profile-index-color-text-2">
-                        (
-                        {outValue
-                          ? filterMillisecond(overviewInfo?.totalTime / 1000000)
-                          : filterMillisecond(queryDuration)}
-                        )
-                      </span>{' '}
+                      {isAdmin ? (
+                        <span className="profile-index-color-text-2">
+                          (
+                          {outValue
+                            ? filterMillisecond(
+                                overviewInfo?.totalTime / 1000000,
+                              )
+                            : filterMillisecond(queryDuration)}
+                          )
+                        </span>
+                      ) : null}
                       {overviewInfo?.totalTimePercent}
                     </span>
                   </div>
@@ -638,7 +674,18 @@ const QueryProfile: FC<IProps> = ({
           <>
             {plainData?.length > 0 ? (
               <CacheFlowAnalysisGraph
-                onShare={onShare}
+                onShare={
+                  canShare
+                    ? () => {
+                        copy(
+                          'https://profile.databend.com/' +
+                            '?value=' +
+                            compressAndEncode(JSON.stringify(outValue)),
+                        );
+                        message.success('Copied to clipboard');
+                      }
+                    : undefined
+                }
                 queryId={queryId}
                 plainData={plainData}
                 graphSize={graphSize}
@@ -648,81 +695,89 @@ const QueryProfile: FC<IProps> = ({
                 handleResize={handleResize}
                 overviewInfoCurrent={overviewInfoCurrent}
                 onReady={(graph) => {
-                  graphRef.current = graph;
-                  graph.setMaxZoom(2);
-                  // graph.setMinZoom(0.5);
-                  graph.on('node:click', (evt) => {
-                    setIsTotalOverView(false);
-                    const modal = evt.item._cfg.model;
-                    setOverInfo({
-                      ...modal,
-                      isNode: true,
+                  if (graph) {
+                    graphRef.current = graph;
+                    graph.setMaxZoom(2);
+                    // graph.setMinZoom(0.5);
+                    graph.on('node:click', (evt) => {
+                      setIsTotalOverView(false);
+                      const modal = evt.item._cfg.model;
+                      setOverInfo({
+                        ...modal,
+                        isNode: true,
+                      });
+                      const nodes = getAllNodes(graph);
+                      const id = evt.item._cfg.id;
+                      const node = nodes?.find((node) => node?._cfg.id === id);
+                      nodes
+                        ?.filter((node) => node._cfg.id !== id)
+                        .forEach((n) => {
+                          if (graph) {
+                            graph.clearItemStates(n);
+                          }
+                        });
+                      setNodeActive(graph, node);
                     });
-                    const nodes = getAllNodes(graph);
-                    const id = evt.item._cfg.id;
-                    const node = nodes?.find((node) => node?._cfg.id === id);
-                    nodes
-                      ?.filter((node) => node._cfg.id !== id)
-                      .forEach((n) => {
-                        graph.clearItemStates(n);
-                      });
-                    setNodeActive(graph, node);
-                  });
-                  graph.on('node:mouseleave', () => {
-                    if (profileWrapRefCanvas.current) {
-                      profileWrapRefCanvas.current.style.cursor = 'move';
-                    }
-                    resetToolTipInfo();
-                  });
-                  graph.on('node:mouseover', (e) => {
-                    const name = e?.target?.cfg?.name;
-                    if (name?.includes('percentage-output-text')) {
+                    graph.on('node:mouseleave', () => {
+                      if (profileWrapRefCanvas?.current) {
+                        profileWrapRefCanvas.current.style.cursor = 'move';
+                      }
+                      resetToolTipInfo();
+                    });
+                    graph.on('node:mouseover', (e) => {
+                      const name = e?.target?.cfg?.name;
+                      if (name?.includes('percentage-output-text')) {
+                        const { clientX, clientY } = e;
+                        const outputRows = e?.item?._cfg?.model?.outputRows;
+                        setTooltipInfo({
+                          clientX: clientX - 70,
+                          clientY: clientY - 52,
+                          show: true,
+                          text: `Output Rows: ${toThousands(outputRows)}`,
+                        });
+                      } else {
+                        resetToolTipInfo();
+                      }
+                    });
+                    graph.on('canvas:click', () => {
+                      setActiveName('');
+                      setIsTotalOverView(true);
+                      setOverviewInfo(overviewInfoCurrent?.current);
+                      getOverviewInfo?.(overviewInfoCurrent?.current);
+                      clearNodeActive(graph);
+                    });
+                    graph.on('canvas:dragstart', () => {
+                      if (profileWrapRef?.current) {
+                        profileWrapRef.current.style.userSelect = 'none';
+                      }
+                    });
+                    graph.on('canvas:dragend', () => {
+                      if (profileWrapRef?.current) {
+                        profileWrapRef.current.style.userSelect = 'unset';
+                      }
+                    });
+                    graph.on('edge:mouseover', (e) => {
+                      const type = e?.target?.cfg?.type;
+                      const rows = e?.item?._cfg?.model?._value;
                       const { clientX, clientY } = e;
-                      const outputRows = e?.item?._cfg?.model?.outputRows;
-                      setTooltipInfo({
-                        clientX: clientX - 70,
-                        clientY: clientY - 52,
-                        show: true,
-                        text: `Output Rows: ${toThousands(outputRows)}`,
-                      });
-                    } else {
+                      if (type === 'text') {
+                        setTooltipInfo({
+                          clientX: clientX - 40,
+                          clientY: clientY - 50,
+                          show: true,
+                          text: `Rows: ${toThousands(rows)}`,
+                        });
+                      } else {
+                        resetToolTipInfo();
+                      }
+                    });
+                    graph.on('edge:mouseleave', () => {
+                      if (profileWrapRefCanvas?.current) {
+                        profileWrapRefCanvas.current.style.cursor = 'move';
+                      }
                       resetToolTipInfo();
-                    }
-                  });
-                  graph.on('canvas:click', () => {
-                    setActiveName('');
-                    setIsTotalOverView(true);
-                    setOverviewInfo(overviewInfoCurrent?.current);
-                    getOverviewInfo?.(overviewInfoCurrent?.current);
-                    clearNodeActive(graph);
-                  });
-                  graph.on('canvas:dragstart', () => {
-                    profileWrapRef.current.style.userSelect = 'none';
-                  });
-                  graph.on('canvas:dragend', () => {
-                    profileWrapRef.current.style.userSelect = 'unset';
-                  });
-                  graph.on('edge:mouseover', (e) => {
-                    const type = e?.target?.cfg?.type;
-                    const rows = e?.item?._cfg?.model?._value;
-                    const { clientX, clientY } = e;
-                    if (type === 'text') {
-                      setTooltipInfo({
-                        clientX: clientX - 40,
-                        clientY: clientY - 50,
-                        show: true,
-                        text: `Rows: ${toThousands(rows)}`,
-                      });
-                    } else {
-                      resetToolTipInfo();
-                    }
-                  });
-                  graph.on('edge:mouseleave', () => {
-                    if (profileWrapRefCanvas.current) {
-                      profileWrapRefCanvas.current.style.cursor = 'move';
-                    }
-                    resetToolTipInfo();
-                  });
+                    });
+                  }
                 }}
               />
             ) : (
