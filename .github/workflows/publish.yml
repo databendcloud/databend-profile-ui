@@ -26,8 +26,10 @@ jobs:
       - name: Build Docs
         run: npm run docs:build
 
-      - name: Publish
-        run: npm publish
+      - name: Publish to npm
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN_PROFILE }}
 
