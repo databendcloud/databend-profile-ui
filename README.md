@@ -3,6 +3,7 @@
 
 ```bash
 yarn add databend-profile-ui
+
 ```
 
 ## Usage
